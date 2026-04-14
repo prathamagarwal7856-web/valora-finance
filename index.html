@@ -1,1 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valora Finance — Markets, Intelligence & Insight</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --paper: #f5f0e8;
+    --cream: #ede8db;
+    --gold: #b8860b;
+    --gold-light: #d4a017;
+    --gold-pale: #f0e0a0;
+    --rust: #8b3a1e;
+    --slate: #2c3040;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+    --accent-green: #1a5c3a;
+    --accent-red: #7a1c1c;
+  }
 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── TICKER ─────────────────────────────────────────── */
+  .ticker-bar {
+    background: var(--ink);
+    color: var(--gold-pale);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    padding: 7px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-inner {
+    display: inline-flex;
+    gap: 0;
+    animation: ticker 40s linear infinite;
+  }
+  .ticker-item {
+    padding: 0 28px;
+    border-right: 1px solid #333;
+  }
+  .ticker-item span.up   { color: #4caf7d; margin-left: 6px; }
+  .ticker-item span.down { color: #e05a4e; margin-left: 6px; }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ── MASTHEAD ────────────────────────────────────────── */
+  .masthead {
+    border-bottom: 3px double var(--rule);
+    padding: 22px 60px 16px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    background: var(--paper);
+  }
+  .masthead-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead-logo {
+    text-align: center;
+  }
+  .masthead-logo h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .masthead-logo h1 span { color: var(--gold); }
+  .masthead-logo .tagline {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .masthead-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+  }
+  .btn-subscribe {
+    background: var(--ink);
+    color: var(--gold-pale);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 9px 20px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-subscribe:hover { background: var(--gold); color: var(--ink); }
+
+  /* ── NAV ─────────────────────────────────────────────── */
+  .nav-strip {
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+    padding: 0 60px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-strip a {
+    font-family: 'DM Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 13px 18px;
+    border-right: 1px solid var(--rule);
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+  .nav-strip a:first-child { border-left: 1px solid var(--rule); }
+  .nav-strip a:hover, .nav-strip a.active { background: var(--ink); color: var(--gold-pale); }
+  .nav-strip a.soon {
+    color: var(--muted);
+    font-style: italic;
+  }
+  .nav-strip a.soon::after {
+    content: ' ✦';
+    color: var(--gold);
+    font-size: 8px;
+    vertical-align: super;
+  }
+  .nav-search {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0 8px 18px;
+    border-left: 1px solid var(--rule);
+  }
+  .nav-search input {
+    background: transparent;
+    border: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink);
+    outline: none;
+    width: 140px;
+  }
+  .nav-search input::placeholder { color: var(--muted); }
+
+  /* ── HERO BAND ───────────────────────────────────────── */
+  .hero-band {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 6px 60px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .hero-band .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+    border-right: 1px solid #333;
+    padding-right: 20px;
+  }
+  .hero-band .headline-scroll {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* ── MAIN LAYOUT ─────────────────────────────────────── */
+  .main-grid {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 40px 60px;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 50px;
+  }
+
+  /* ── FEATURED ARTICLE ────────────────────────────────── */
+  .featured-section { }
+  .section-rule {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .section-rule .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+  .section-rule .line {
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .featured-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--rule);
+    margin-bottom: 36px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.7s ease 0.1s forwards;
+  }
+  .featured-card .card-image {
+    background: var(--slate);
+    min-height: 320px;
+    position: relative;
+    overflow: hidden;
+  }
+  .featured-card .card-image .bg-graphic {
+    width: 100%; height: 100%;
+    background: 
+      linear-gradient(135deg, #1a2440 0%, #0d1628 40%, #1c1400 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .featured-card .card-image .chart-svg {
+    width: 85%; opacity: 0.6;
+  }
+  .featured-card .card-body {
+    padding: 32px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--cream);
+  }
+  .card-kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .card-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  .card-excerpt {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--muted);
+    margin-bottom: 20px;
+    flex: 1;
+  }
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--rule);
+    padding-top: 14px;
+  }
+  .card-meta .byline {
+    font-family: 'DM Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .card-meta .read-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 1px;
+  }
+
+  /* ── THREE-COL ARTICLES ──────────────────────────────── */
+  .article-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-bottom: 40px;
+  }
+  .article-cell {
+    background: var(--paper);
+    padding: 22px 20px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  .article-cell:hover { background: var(--cream); }
+  .article-cell:nth-child(1) { animation-delay: 0.2s; }
+  .article-cell:nth-child(2) { animation-delay: 0.35s; }
+  .article-cell:nth-child(3) { animation-delay: 0.5s; }
+
+  .article-cell .kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .article-cell h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.22;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .article-cell p {
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .article-cell .meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ── ECON DATA ROW ───────────────────────────────────── */
+  .data-section { margin-bottom: 40px; }
+  .data-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .data-cell {
+    background: var(--paper);
+    padding: 20px;
+    text-align: center;
+    transition: background 0.2s;
+  }
+  .data-cell:hover { background: var(--cream); }
+  .data-cell .d-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .data-cell .d-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .data-cell .d-change {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+  }
+  .data-cell .d-change.up { color: var(--accent-green); }
+  .data-cell .d-change.down { color: var(--accent-red); }
+  .data-cell .d-change.neutral { color: var(--muted); }
+
+  /* ── VALUATION REPORT CARD ───────────────────────────── */
+  .report-card {
+    border: 1px solid var(--rule);
+    padding: 24px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 1px;
+    background: var(--paper);
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  .report-card:hover { background: var(--cream); }
+  .report-card .ticker-badge {
+    background: var(--ink);
+    color: var(--gold-pale);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 14px;
+    letter-spacing: 0.06em;
+    min-width: 72px;
+    text-align: center;
+  }
+  .report-card .r-info h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .report-card .r-info p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .report-card .r-rating {
+    text-align: right;
+  }
+  .report-card .r-rating .rating {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 5px 12px;
+    border: 1px solid;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+  .rating.buy   { color: var(--accent-green); border-color: var(--accent-green); }
+  .rating.hold  { color: var(--gold);         border-color: var(--gold); }
+  .rating.sell  { color: var(--accent-red);   border-color: var(--accent-red); }
+  .report-card .r-rating .target {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    display: block;
+  }
+
+  /* ── SIDEBAR ─────────────────────────────────────────── */
+  .sidebar { }
+  .sidebar-widget {
+    border: 1px solid var(--rule);
+    margin-bottom: 28px;
+    background: var(--paper);
+  }
+  .widget-head {
+    background: var(--ink);
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .widget-head h3 {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold-pale);
+  }
+  .widget-head .w-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 8.5px;
+    color: #666;
+  }
+  .widget-body { padding: 16px 18px; }
+
+  /* Market Mover rows */
+  .mover-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .mover-row:last-child { border-bottom: none; }
+  .mover-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+  .mover-full {
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: 8px;
+  }
+  .mover-price {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    text-align: right;
+  }
+  .mover-price .price { color: var(--ink); font-weight: 500; }
+  .mover-price .chg { font-size: 10px; display: block; }
+  .mover-price .chg.up { color: var(--accent-green); }
+  .mover-price .chg.down { color: var(--accent-red); }
+
+  /* Newsletter widget */
+  .newsletter-widget {
+    background: var(--ink);
+    padding: 28px 22px;
+    border: 1px solid var(--rule);
+    margin-bottom: 28px;
+  }
+  .newsletter-widget h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--paper);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .newsletter-widget p {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 18px;
+    line-height: 1.6;
+  }
+  .newsletter-widget input {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #444;
+    color: var(--paper);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 10px 14px;
+    outline: none;
+    margin-bottom: 10px;
+    letter-spacing: 0.04em;
+  }
+  .newsletter-widget input::placeholder { color: #555; }
+  .newsletter-widget input:focus { border-color: var(--gold); }
+  .newsletter-widget button {
+    width: 100%;
+    background: var(--gold);
+    color: var(--ink);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 11px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+  .newsletter-widget button:hover { background: var(--gold-light); }
+
+  /* Coming Soon widget */
+  .coming-soon-widget {
+    border: 1px solid var(--gold);
+    padding: 24px 20px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .coming-soon-widget::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .coming-soon-widget .cs-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .coming-soon-widget h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.25;
+    margin-bottom: 10px;
+  }
+  .coming-soon-widget p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  .coming-soon-widget .services {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 16px;
+  }
+  .coming-soon-widget .services .svc {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+  }
+  .coming-soon-widget .services .svc::before {
+    content: '◆';
+    color: var(--gold);
+    font-size: 7px;
+  }
+  .notify-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .notify-btn:hover { background: var(--gold); color: var(--ink); }
+
+  /* ── BOTTOM BAND ─────────────────────────────────────── */
+  .bottom-band {
+    background: var(--cream);
+    border-top: 3px double var(--rule);
+    padding: 40px 60px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+  }
+  .bottom-col h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .bottom-col a, .bottom-col p {
+    display: block;
+    font-size: 12.5px;
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 7px;
+    line-height: 1.5;
+  }
+  .bottom-col a:hover { color: var(--ink); }
+
+  /* ── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--ink);
+    color: #555;
+    padding: 20px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer .f-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--paper);
+  }
+  footer .f-logo span { color: var(--gold); }
+  footer .f-legal {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: #444;
+    text-align: right;
+    line-height: 1.7;
+  }
+
+  /* ── ANIMATIONS ──────────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ──────────────────────────────────────── */
+  @media (max-width: 1100px) {
+    .main-grid { grid-template-columns: 1fr; padding: 30px 30px; }
+    .masthead { padding: 20px 30px; }
+    .nav-strip { padding: 0 20px; overflow-x: auto; }
+    .bottom-band { grid-template-columns: 1fr 1fr; padding: 30px; }
+    footer { padding: 18px 30px; }
+  }
+  @media (max-width: 700px) {
+    .masthead { grid-template-columns: 1fr; text-align: center; gap: 10px; }
+    .masthead-date, .masthead-actions { display: none; }
+    .featured-card { grid-template-columns: 1fr; }
+    .article-grid { grid-template-columns: 1fr; }
+    .data-grid { grid-template-columns: 1fr 1fr; }
+    .bottom-band { grid-template-columns: 1fr; padding: 24px; }
+    .hero-band, footer { padding-left: 20px; padding-right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-inner" id="tickerInner">
+    <!-- JS fills this -->
+  </div>
+</div>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="masthead-date" id="mdate"></div>
+  <div class="masthead-logo">
+    <h1>Valora<span>.</span>Finance</h1>
+    <p class="tagline">Markets · Intelligence · Insight</p>
+  </div>
+  <div class="masthead-actions">
+    <button class="btn-subscribe">Subscribe</button>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav-strip">
+  <a href="#" class="active">Home</a>
+  <a href="#markets">Markets</a>
+  <a href="#economics">Economics</a>
+  <a href="#valuations">Valuations</a>
+  <a href="#business">Business</a>
+  <a href="#" class="soon">Fund Services</a>
+  <a href="#" class="soon">Lending</a>
+  <div class="nav-search">
+    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" placeholder="Search articles…">
+  </div>
+</nav>
+
+<!-- BREAKING BAND -->
+<div class="hero-band">
+  <span class="label">Breaking</span>
+  <span class="headline-scroll">Fed signals cautious stance on rate cuts as inflation data surprises
